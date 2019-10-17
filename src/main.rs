@@ -14,6 +14,8 @@ use juniper::http::GraphQLRequest;
 
 mod db;
 mod graphql_schema;
+mod resolvers;
+mod typedefs;
 mod schema;
 
 use crate::db::establish_connection;
@@ -44,7 +46,7 @@ fn graphql(
 }
 
 fn main() -> io::Result<()> {
-     dotenv().ok();
+    dotenv().ok();
     let pool = establish_connection();
     let schema_context = Context { db: pool.clone() };
     let schema = std::sync::Arc::new(create_schema());

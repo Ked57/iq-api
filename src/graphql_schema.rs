@@ -2,10 +2,11 @@ extern crate dotenv;
 
 use diesel::prelude::*;
 use juniper::RootNode;
-use uuid::Uuid;
 
 use crate::db::PgPool;
+use crate::resolvers::user_resolvers::{users_resolver};
 use crate::schema::user;
+use crate::typedefs::user_typedefs::{User, UserInput};
 
 #[derive(Clone)]
 pub struct Context {
@@ -14,46 +15,13 @@ pub struct Context {
 
 impl juniper::Context for Context {}
 
-#[derive(Queryable, PartialEq, Debug)]
-pub struct User {
-    pub id: Uuid,
-    pub user_id: String,
-    pub user_name: String,
-}
-
-#[juniper::object(description = "A User of instaq")]
-impl User {
-    pub fn id(&self) -> &Uuid {
-        &self.id
-    }
-
-    pub fn user_id(&self) -> &str {
-        self.user_id.as_str()
-    }
-
-    pub fn user_name(&self) -> &str {
-        self.user_name.as_str()
-    }
-}
-
-#[derive(juniper::GraphQLInputObject, Insertable)]
-#[table_name = "user"]
-pub struct UserInput {
-    pub user_id: String,
-    pub user_name: String,
-}
-
-pub struct QueryRoot;
+pub struct QueryRoot {}
 
 #[juniper::object(Context = Context)]
 impl QueryRoot {
-    fn users(context: &Context) -> Vec<User> {
-        use crate::schema::user::dsl::*;
-        let connection = context.db.get().unwrap();
-        user.limit(100)
-            .load::<User>(&connection)
-            .expect("Couldn't load users")
-    }
+   fn users(context: &Context) -> Vec<User> {
+      users_resolver(context)
+   }
 }
 
 pub struct MutationRoot;
