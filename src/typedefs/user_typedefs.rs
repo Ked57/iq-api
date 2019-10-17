@@ -1,5 +1,5 @@
-use uuid::Uuid;
 use crate::schema::user;
+use uuid::Uuid;
 
 #[derive(Queryable, PartialEq, Debug)]
 pub struct User {

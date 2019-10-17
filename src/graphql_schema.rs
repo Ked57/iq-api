@@ -4,7 +4,7 @@ use diesel::prelude::*;
 use juniper::RootNode;
 
 use crate::db::PgPool;
-use crate::resolvers::user_resolvers::{users_resolver};
+use crate::resolvers::user_resolvers::users_resolver;
 use crate::schema::user;
 use crate::typedefs::user_typedefs::{User, UserInput};
 
@@ -19,9 +19,9 @@ pub struct QueryRoot {}
 
 #[juniper::object(Context = Context)]
 impl QueryRoot {
-   fn users(context: &Context) -> Vec<User> {
-      users_resolver(context)
-   }
+    fn users(context: &Context) -> Vec<User> {
+        users_resolver(context)
+    }
 }
 
 pub struct MutationRoot;

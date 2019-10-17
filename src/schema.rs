@@ -33,9 +33,4 @@ table! {
 joinable!(members -> teams (team_id));
 joinable!(post -> user (user_id));
 
-allow_tables_to_appear_in_same_query!(
-    members,
-    post,
-    teams,
-    user,
-);
+allow_tables_to_appear_in_same_query!(members, post, teams, user,);

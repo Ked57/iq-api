@@ -15,8 +15,8 @@ use juniper::http::GraphQLRequest;
 mod db;
 mod graphql_schema;
 mod resolvers;
-mod typedefs;
 mod schema;
+mod typedefs;
 
 use crate::db::establish_connection;
 use crate::graphql_schema::{create_schema, Context, Schema};
