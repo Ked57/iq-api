@@ -1,5 +1,5 @@
 [package]
-name = "gateway-rust"
+name = "iq-api"
 version = "0.1.0"
 authors = ["Ked57 <kedketh@gmail.com>"]
 edition = "2018"
