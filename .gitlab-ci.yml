@@ -18,8 +18,8 @@ services:
 build:
   stage: build
   script:
-    - echo $CI_REGISTRY_USER $CI_REGISTRY_PASSWORD
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com/instaq-epsi/rust-api
+    - echo $CI_REGISTRY
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
     - docker build -t $IMAGE .
     - docker push $IMAGE
   tags: 
