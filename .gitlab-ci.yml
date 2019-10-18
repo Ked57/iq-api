@@ -5,8 +5,6 @@ stages:
   - deploy
 
 variables:
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_HOST: tcp://docker:2375
   IMAGE: registry.gitlab.com/instaq-epsi/rust-api
   RELEASE_IMAGE: $IMAGE:latest
   KUBE_CONFIG: $KUBE_CONFIG 
@@ -14,8 +12,6 @@ variables:
   CONTAINER: rust-api
   NAMESPACE: instaq
 
-services:
-  - docker:19.03.1-dind
 build:
   stage: build
   script:
