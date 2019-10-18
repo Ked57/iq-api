@@ -1,4 +1,4 @@
-FROM rust:latest as cargo-build
+FROM rust as cargo-build
 
 WORKDIR /usr/src/iq-api
 
