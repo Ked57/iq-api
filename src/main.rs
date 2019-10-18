@@ -37,7 +37,6 @@ fn graphql(
     ctx: web::Data<Context>,
     data: web::Json<GraphQLRequest>,
 ) -> impl Future<Item = HttpResponse, Error = Error> {
-    println!("Received a request for /graphql");
     web::block(move || {
         let res = data.execute(&st, &ctx);
         Ok::<_, serde_json::error::Error>(serde_json::to_string(&res)?)
@@ -59,7 +58,6 @@ fn main() -> io::Result<()> {
     let pool = establish_connection();
     let schema_context = Context { db: pool.clone() };
     let schema = std::sync::Arc::new(create_schema());
-    // println!("Starting server...");
     HttpServer::new(move || {
         App::new()
             .wrap(
