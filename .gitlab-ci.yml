@@ -31,7 +31,7 @@ deploy_staging:
   script:
     - printf "$KUBE_CONFIG" > $HOME/.kube/config
     - cat $HOME/.kube/config
-    - kubectl rollout restart deployment/rust-api-app -n rust-api
+    - kubectl rollout restart deployment/rust-api-app -n instaq
   only:
     - master
   # tags: 
