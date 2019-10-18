@@ -1,4 +1,4 @@
-image:  docker:19.03.1
+image: docker:18.09.7
 
 stages:
   - build
@@ -15,7 +15,7 @@ variables:
   NAMESPACE: instaq
 
 services:
-  - docker:19.03.1-dind
+  - docker:18.09.7-dind
 build:
   stage: build
   script:
