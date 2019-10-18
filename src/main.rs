@@ -5,6 +5,7 @@ extern crate juniper;
 
 use std::io;
 use std::sync::Arc;
+use std::env;
 
 use actix_web::{web, App, Error, HttpResponse, HttpServer};
 use dotenv::dotenv;
@@ -22,7 +23,8 @@ use crate::db::establish_connection;
 use crate::graphql_schema::{create_schema, Context, Schema};
 
 fn graphiql() -> HttpResponse {
-    let html = graphiql_source("http://localhost:8080/graphql");
+    let port = env::var("PORT").expect("PORT must be set");
+    let html = graphiql_source(&format!("http://localhost:{}/graphql", port));
     HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
         .body(html)
@@ -47,6 +49,7 @@ fn graphql(
 
 fn main() -> io::Result<()> {
     dotenv().ok();
+    let port = env::var("PORT").expect("PORT must be set");
     let pool = establish_connection();
     let schema_context = Context { db: pool.clone() };
     let schema = std::sync::Arc::new(create_schema());
@@ -57,6 +60,6 @@ fn main() -> io::Result<()> {
             .service(web::resource("/graphql").route(web::post().to_async(graphql)))
             .service(web::resource("/graphiql").route(web::get().to(graphiql)))
     })
-    .bind("localhost:8080")?
+    .bind(format!("localhost:{}", port))?
     .run()
 }
