@@ -60,6 +60,6 @@ fn main() -> io::Result<()> {
             .service(web::resource("/graphql").route(web::post().to_async(graphql)))
             .service(web::resource("/graphiql").route(web::get().to(graphiql)))
     })
-    .bind(format!("localhost:{}", port))?
+    .bind(format!("0.0.0.0:{}", port))?
     .run()
 }

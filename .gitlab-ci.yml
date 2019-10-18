@@ -9,7 +9,6 @@ variables:
   RELEASE_IMAGE: $IMAGE:latest
   KUBE_CONFIG: $KUBE_CONFIG 
   DEPLOYMENT: rust-api-app
-  CONTAINER: rust-api
   NAMESPACE: instaq
 
 build:

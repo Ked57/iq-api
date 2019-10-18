@@ -6,6 +6,6 @@ COPY . .
 
 RUN cargo build --release
 
-EXPOSE $PORT
+EXPOSE 9000
 
 CMD ["./target/release/iq-api"]
