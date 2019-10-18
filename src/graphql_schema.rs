@@ -1,10 +1,11 @@
 extern crate dotenv;
 
 use diesel::prelude::*;
-use juniper::RootNode;
+use juniper::{RootNode, FieldResult};
+use uuid::Uuid;
 
 use crate::db::PgPool;
-use crate::resolvers::user_resolvers::users_resolver;
+use crate::resolvers::user_resolvers::{users_resolver, user_resolver_by_id};
 use crate::schema::user;
 use crate::typedefs::user_typedefs::{User, UserInput};
 
@@ -17,12 +18,20 @@ impl juniper::Context for Context {}
 
 pub struct QueryRoot {}
 
-#[juniper::object(Context = Context)]
-impl QueryRoot {
-    fn users(context: &Context) -> Vec<User> {
-        users_resolver(context)
+graphql_object!(QueryRoot: Context |&self| {
+
+    field apiVersion() -> &str {
+        "1.0"
     }
-}
+
+    field users(&executor) -> FieldResult<Vec<User>> {
+        Ok(users_resolver(executor.context()))
+    }
+
+    field user(&executor, id: Uuid) -> FieldResult<Option<User>> {
+        Ok(user_resolver_by_id(executor.context(), id))
+    }
+});
 
 pub struct MutationRoot;
 

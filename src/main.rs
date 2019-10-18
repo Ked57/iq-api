@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate diesel;
 extern crate dotenv;
+#[macro_use]
 extern crate juniper;
 
 use std::io;
@@ -9,7 +10,7 @@ use std::env;
 
 
 use actix_cors::Cors;
-use actix_web::{web, App, Error, HttpResponse, HttpServer, middleware::Logger, http::header};
+use actix_web::{web, App, Error, HttpResponse, HttpServer, middleware::Logger};
 use dotenv::dotenv;
 use futures::future::Future;
 use juniper::http::graphiql::graphiql_source;
@@ -54,7 +55,6 @@ fn main() -> io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
     let port = env::var("PORT").expect("PORT must be set");
-    let origin = env::var("ORIGIN").expect("ORIGIN must be set");
     let pool = establish_connection();
     let schema_context = Context { db: pool.clone() };
     let schema = std::sync::Arc::new(create_schema());
