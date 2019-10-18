@@ -62,11 +62,6 @@ fn main() -> io::Result<()> {
         App::new()
             .wrap(
                 Cors::new()
-                    .allowed_origin(&origin)
-                    .allowed_methods(vec!["GET", "POST", "OPTIONS"])
-                    .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
-                    .allowed_header(header::CONTENT_TYPE)
-                    .max_age(3600),
             )
             .wrap(Logger::default())
             .data(schema.clone())
