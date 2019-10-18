@@ -1,4 +1,4 @@
-image: docker:18.09.7
+image:  docker:19.03.1
 
 stages:
   - build
@@ -15,15 +15,15 @@ variables:
   NAMESPACE: instaq
 
 services:
-  - docker:18.09.7-dind
+  - docker:19.03.1-dind
 build:
   stage: build
   script:
     - docker login -u $CI_USER -p $ACCESS_TOKEN $CI_REGISTRY
     - docker build -t $IMAGE .
     - docker push $IMAGE
-  tags: 
-    - instaq
+  # tags: 
+  #   - instaq
 
 deploy_staging:
   stage: deploy
@@ -34,5 +34,5 @@ deploy_staging:
     - kubectl rollout restart deployment/rust-api-app -n rust-api
   only:
     - master
-  tags: 
-    - instaq
+  # tags: 
+  #   - instaq
