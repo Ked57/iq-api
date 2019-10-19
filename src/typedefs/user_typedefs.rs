@@ -29,3 +29,11 @@ pub struct UserInput {
     pub user_id: String,
     pub user_name: String,
 }
+
+#[derive(juniper::GraphQLInputObject)]
+pub struct UserWhereInput {
+    pub id: Option<Uuid>,
+    pub user_id: Option<String>,
+    pub user_name: Option<String>,
+}
+
