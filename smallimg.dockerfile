@@ -1,19 +1,35 @@
-FROM rust:latest as builder
-# Choose a workdir
-WORKDIR /usr/src/app
-# Create blank project
-RUN USER=root cargo init
-# Copy Cargo.toml to get dependencies
-COPY Cargo.toml .
-# This is a dummy build to get the dependencies cached
-RUN cargo build --release
-# Copy sources
-COPY src src
-# Build app (bin will be in /usr/src/app/target/release/iq-api)
-RUN cargo build --release
+FROM ekidd/rust-musl-builder:1.38.0 AS builder
 
-FROM debian:stretch-slim
-# Copy bin from builder to this new image
-COPY --from=builder /usr/src/app/target/release/iq-api /bin/
-# Default command, run app
-CMD iq-api
+ARG TARGET_ARCHITECTURE=x86_64-unknown-linux-musl
+
+USER root
+
+RUN apt-get update && \
+  apt-get install -y upx
+
+WORKDIR /app
+
+RUN sudo chown rust:rust .
+
+USER rust
+
+# Install and build dependencies first to avoid rebuilding on source change.
+COPY Cargo.toml .
+RUN mkdir src && \
+  echo "fn main() { }" > src/main.rs && \
+  cargo build --release && \
+  rm -rf /app/target/${TARGET_ARCHITECTURE}/release/deps/iq-api*
+
+# Build and compress the program.
+COPY . .
+RUN cargo build --target ${TARGET_ARCHITECTURE} --release
+RUN strip /app/target/${TARGET_ARCHITECTURE}/release/iq-api
+RUN upx --brute /app/target/${TARGET_ARCHITECTURE}/release/iq-api
+RUN mv /app/target/${TARGET_ARCHITECTURE}/release/iq-api /app/iq-api
+
+FROM scratch
+
+COPY --from=builder /app/iq-api /
+EXPOSE 9000
+
+CMD ["/iq-api"]
